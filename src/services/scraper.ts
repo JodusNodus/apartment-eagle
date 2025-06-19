@@ -70,10 +70,17 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     // Get the rendered HTML
     const html = await page.content();
 
+    // Use selector from config or fall back to body
+    const selector = agency.selector || "body";
+
+    // Extract content using the selector
+    const $ = cheerio.load(html);
+    const bodyContent = $(selector).html();
+
     return {
       agency: agency.name,
       url: agency.url,
-      html: html,
+      html: bodyContent || html,
       timestamp: new Date(),
     };
   } catch (error: any) {
