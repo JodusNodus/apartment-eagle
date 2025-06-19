@@ -63,7 +63,7 @@ export const config = {
     },
     {
       name: "Coprimmo",
-      url: "https://www.coprimmo.be/nl/te-huur?view=list&task=showAjaxList&page=1&goal=1&ptype=2&pricemax=1500&cities=ANTWERPEN|2150-2600-2000-2018-2050-2060&minroom=1",
+      url: "https://www.coprimmo.be/nl/te-huur?view=list&page=1&goal=1&ptype=2&pricemax=1500&cities=ANTWERPEN|2150-2600-2000-2018-2050-2060&minroom=1",
       selector: ".propety-group",
       javascript: true,
     },

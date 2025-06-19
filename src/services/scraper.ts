@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import puppeteer from "puppeteer";
+import puppeteer, { Browser } from "puppeteer";
 import fs from "fs-extra";
 import path from "path";
 import { config, Agency } from "../config/config.js";
@@ -13,12 +13,13 @@ export interface Listing {
   timestamp: Date;
 }
 
-async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
-  let browser;
-  try {
-    logger.info(`[${agency.name}] Scraping with Puppeteer`);
+// Shared browser instance
+let sharedBrowser: Browser | null = null;
 
-    browser = await puppeteer.launch({
+export async function getSharedBrowser(): Promise<Browser> {
+  if (!sharedBrowser) {
+    logger.info("Creating shared Puppeteer browser instance");
+    sharedBrowser = await puppeteer.launch({
       headless: "new",
       args: [
         "--no-sandbox",
@@ -30,7 +31,23 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
         "--disable-gpu",
       ],
     });
+  }
+  return sharedBrowser;
+}
 
+export async function closeSharedBrowser(): Promise<void> {
+  if (sharedBrowser) {
+    logger.info("Closing shared Puppeteer browser instance");
+    await sharedBrowser.close();
+    sharedBrowser = null;
+  }
+}
+
+async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
+  try {
+    logger.info(`[${agency.name}] Scraping with Puppeteer`);
+
+    const browser = await getSharedBrowser();
     const page = await browser.newPage();
 
     // Set user agent
@@ -53,22 +70,6 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     // Get the rendered HTML
     const html = await page.content();
 
-    // Save HTML to file for debugging
-    const debugDir = path.resolve("debug");
-    await fs.ensureDir(debugDir);
-
-    // Also save a screenshot for visual debugging
-    const screenshotPath = path.join(
-      debugDir,
-      `${agency.name.replace(/\s+/g, "_")}.png`
-    );
-    await page.screenshot({
-      path: screenshotPath,
-      fullPage: true,
-    });
-
-    logger.info(`[${agency.name}] Received ${html.length} characters`);
-
     return {
       agency: agency.name,
       url: agency.url,
@@ -83,10 +84,6 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
       html: "",
       timestamp: new Date(),
     };
-  } finally {
-    if (browser) {
-      await browser.close();
-    }
   }
 }
 
@@ -132,8 +129,6 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
     $clean("script, style, noscript, .advertisement, .ads").remove();
 
     const cleanContent = $clean.html() || bodyContent;
-
-    logger.info(`[${agency.name}] Received ${cleanContent.length} characters`);
 
     return {
       agency: agency.name,

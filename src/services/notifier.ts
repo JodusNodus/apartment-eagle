@@ -20,49 +20,16 @@ export async function sendBatchNotification(
   );
   logger.info(`Email will be sent to: ${config.email.to}`);
 
-  const timestamp = new Date().toISOString();
-
-  // Extract URLs from evaluations
-  const urls = new Set<string>();
-  evaluations.forEach(({ evaluation }) => {
-    // First try to extract markdown format URLs: [text](url)
-    const markdownMatches = evaluation.match(/\[([^\]]+)\]\(([^)]+)\)/g);
-    if (markdownMatches) {
-      markdownMatches.forEach((match) => {
-        const urlMatch = match.match(/\[([^\]]+)\]\(([^)]+)\)/);
-        if (urlMatch) {
-          urls.add(urlMatch[2]); // Extract the actual URL
-        }
-      });
-    }
-
-    // If no markdown URLs found, extract plain URLs
-    if (urls.size === 0) {
-      const plainUrlMatches = evaluation.match(/https?:\/\/[^\s]+/g);
-      if (plainUrlMatches) {
-        plainUrlMatches.forEach((url) => urls.add(url));
-      }
-    }
-  });
-
-  if (urls.size === 0) {
-    throw new Error("No URLs found in evaluations");
-  }
-
-  // Create simple URL list
-  const urlList = Array.from(urls)
-    .map((url, index) => `${index + 1}. ${url}`)
-    .join("\n");
-
   const mailOptions = {
     from: config.email.user,
     to: config.email.to,
-    subject: `New Apartments Found: ${urls.size} listings`,
-    text: `New apartment listings found!\n\nTimestamp: ${timestamp}\n\nURLs to visit:\n${urlList}`,
+    subject: `New Apartments Found: ${evaluations.length} listings`,
+    text: `New apartment listings found!`,
     html: `
       <h2>New Apartments Found!</h2>
       <ol>
-        ${Array.from(urls)
+        ${Array.from(evaluations)
+          .map((e) => e.url)
           .map((url) => `<li><a href="${url}" target="_blank">${url}</a></li>`)
           .join("")}
       </ol>
@@ -71,7 +38,9 @@ export async function sendBatchNotification(
 
   try {
     await transporter.sendMail(mailOptions);
-    logger.info(`Batch notification sent successfully with ${urls.size} URLs`);
+    logger.info(
+      `Batch notification sent successfully with ${evaluations.length} URLs`
+    );
   } catch (error: any) {
     logger.error(`Error sending batch notification: ${error.message}`);
     logger.error(
