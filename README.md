@@ -1,14 +1,16 @@
 # Apartment Watcher
 
-A Node.js application that scrapes rental agencies in Antwerp and monitors for new apartments using AI for evaluation.
+A Node.js application that checks rental agency websites in Antwerp and notifies you when new apartments match your criteria.
 
-## Features
+## How It Works
 
-- Scrapes multiple rental agency websites
-- Uses AI (DeepSeek) to evaluate apartments against your criteria
-- Sends email notifications when matching apartments are found
-- Runs on a configurable schedule
-- Logs all activities for monitoring
+The apartment watcher follows these simple steps:
+
+1. **Check All Agencies** - Looks at all rental agency websites
+2. **Find New Listings** - Identifies new apartment listings across all agencies
+3. **Get Details** - Scrapes the full details of each listing
+4. **Check Criteria** - Uses AI to see if each listing matches your requirements
+5. **Send Alerts** - Emails you when matching apartments are found
 
 ## Setup
 
@@ -20,7 +22,7 @@ npm install
 
 ### 2. Environment Variables
 
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file in the root directory:
 
 ```env
 # DeepSeek API Key for AI evaluation
@@ -33,8 +35,9 @@ EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password_here
 EMAIL_TO=recipient@example.com
 
-# Optional: Scraping configuration
+# Optional: How often to check (in minutes)
 SCRAPE_INTERVAL_MINUTES=30
+MAX_SCRAPE_INTERVAL_MINUTES=45
 MAX_RETRIES=3
 REQUEST_DELAY_MS=2000
 
@@ -47,7 +50,7 @@ LOG_LEVEL=info
 
 ### 3. Email Setup
 
-For Gmail, you'll need to:
+For Gmail:
 
 1. Enable 2-factor authentication
 2. Generate an "App Password"
@@ -72,33 +75,15 @@ npm run build
 npm start
 ```
 
-## Current Criteria
-
-The application is currently configured to find apartments that meet these criteria:
-
-**Mandatory requirements:**
-
-- Must be in Antwerp
-- Must have at least 2 bedrooms (or 1 bedroom and a bureau)
-- Must cost less than 1300 EUR/month
-- If a move-in date is provided, it must be after July 30th
-
-**Optional preferences:**
-
-- Terrace would be ideal
-
 ## Monitoring
 
-The application logs all activities to:
+The application keeps logs in:
 
-- `logs/combined.log` - All logs
-- `logs/error.log` - Error logs only
+- `logs/combined.log` - All activity logs
+- `logs/error.log` - Only error messages
 
-## Troubleshooting
+## What It Looks For
 
-If you're not receiving email notifications:
+See [CRITERIA.md](./CRITERIA.md) for the complete list of apartment requirements.
 
-1. Check that all environment variables are set correctly
-2. Verify your email credentials (especially app passwords for Gmail)
-3. Check the logs for any error messages
-4. Ensure the DeepSeek API key is valid and has sufficient credits
+**To modify search criteria:** Edit the `CRITERIA.md` file and restart the application. The AI will automatically use your updated criteria for evaluating apartments.

@@ -3,6 +3,8 @@ import { config } from "../config/config.js";
 import logger from "../utils/logger.js";
 import { PropertyDetail } from "./detailScraper.js";
 import { flattenHTML } from "./flatten-thml.js";
+import fs from "fs-extra";
+import path from "path";
 
 // Initialize DeepSeek client
 const deepseek = new OpenAI({
@@ -10,17 +12,27 @@ const deepseek = new OpenAI({
   baseURL: "https://api.deepseek.com/v1",
 });
 
-const DEFAULT_CRITERIA = `MANDATORY requirements (all must be met):
-- Must be in Antwerp city or aera so Berchem, Deurne, Wilrijk, Borgerhout
-- If room information is provided, must have at least 2 rooms (or 1 bedroom and a bureau)
-- Must cost less than 1300 EUR/month (1,300 or 1300 or 1300.00)
-- Must cost more than 950 EUR/month (950 or 950.00)
-- If a move-in date is provided, it must be after July 30th, if it is not provided, it is not a problem
+// Function to load criteria from file
+async function loadCriteriaFromFile(): Promise<string> {
+  try {
+    const criteriaPath = path.join(process.cwd(), "CRITERIA.md");
+    const criteria = await fs.readFile(criteriaPath, "utf-8");
+    return criteria;
+  } catch (error) {
+    logger.warn("Could not load CRITERIA.md, using default criteria");
+    throw error;
+  }
+}
 
-OPTIONAL preferences (nice to have, but not required):
-- Terrace would be ideal
+// Cache for criteria to avoid reading file multiple times
+let cachedCriteria: string | null = null;
 
-An apartment matches if it meets ALL mandatory requirements. The terrace is optional.`;
+async function getCriteria(): Promise<string> {
+  if (!cachedCriteria) {
+    cachedCriteria = await loadCriteriaFromFile();
+  }
+  return cachedCriteria;
+}
 
 export interface PropertyEvaluation {
   property: PropertyDetail;
@@ -29,11 +41,13 @@ export interface PropertyEvaluation {
 }
 
 export async function evaluatePropertyDetail(
-  property: PropertyDetail,
-  criteria: string = DEFAULT_CRITERIA
+  property: PropertyDetail
 ): Promise<PropertyEvaluation> {
   try {
     logger.info(`[${property.agency}] Evaluating property: ${property.url}`);
+
+    // Use provided criteria or load from file
+    const evaluationCriteria = await getCriteria();
 
     // Flatten and simplify the HTML
     const flattenedHtml = flattenHTML(property.html);
@@ -43,14 +57,11 @@ export async function evaluatePropertyDetail(
 
     const prompt = `You are analyzing a rental property detail page to determine if it matches the given criteria.
 
-CRITERIA: ${criteria}
-
-AGENCY: ${property.agency}
-URL: ${property.url}
+INPUT CRITERIA: ${evaluationCriteria}
 
 TASK: Analyze the flattened HTML content below and determine if this property matches ALL mandatory requirements. Extract all relevant information (price, address, rooms, features, etc.) from the flattened HTML. Be systematic and thorough.
 
-FLATTENED HTML CONTENT:
+INPUT FLATTENED HTML CONTENT:
 ${flattenedHtml}
 
 RESPONSE FORMAT:
@@ -122,8 +133,7 @@ IMPORTANT: Return ONLY the JSON object, no markdown formatting, no code blocks, 
 }
 
 export async function evaluateAllProperties(
-  properties: PropertyDetail[],
-  criteria: string = DEFAULT_CRITERIA
+  properties: PropertyDetail[]
 ): Promise<PropertyEvaluation[]> {
   if (properties.length === 0) {
     return [];
@@ -137,7 +147,7 @@ export async function evaluateAllProperties(
   for (let i = 0; i < properties.length; i++) {
     const property = properties[i];
     try {
-      const evaluation = await evaluatePropertyDetail(property, criteria);
+      const evaluation = await evaluatePropertyDetail(property);
       evaluations.push(evaluation);
 
       // Add a small delay between evaluations to avoid rate limiting
