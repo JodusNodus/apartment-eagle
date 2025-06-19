@@ -12,7 +12,7 @@ const deepseek = new OpenAI({
 
 const DEFAULT_CRITERIA = `MANDATORY requirements (all must be met):
 - Must be in Antwerp
-- Must have at least 2 bedrooms (or 1 bedroom and a bureau)
+- If room information is provided, must have at least 2 rooms (or 1 bedroom and a bureau)
 - Must cost less than 1300 EUR/month (1,300 or 1300 or 1300.00)
 - Must cost more than 950 EUR/month (950 or 950.00)
 - If a move-in date is provided, it must be after July 30th, if it is not provided, it is not a problem
@@ -79,22 +79,17 @@ PRICE EVALUATION RULES:
 - Convert all prices to numbers for comparison (ignore currency symbols and commas)
 - If price is in different currency, note it but still evaluate against 1300 EUR limit
 
-IMPORTANT: Only include apartments that either:
-- Match ALL mandatory criteria, OR
-- Are close to matching (e.g., right location and price but missing 1 bedroom, or slightly over budget but otherwise perfect)
+IMPORTANT: Only include apartments that match ALL mandatory criteria.
 
 Filter out apartments that clearly don't match (wrong location, way over budget, studios when you need 2+ bedrooms, etc.).
 Also filter out any apartments whose URLs are listed in the EXCLUDE section.
 
 RESPONSE FORMAT - Keep it concise and clean:
 
-If you find ANY apartment listings that match the criteria, respond with:
+If you find ANY apartment listings that match ALL mandatory criteria, respond with:
 "YES - Found matching apartment(s): [list ONLY the matching apartments with: Name - Price - Bedrooms - Location - [URL](URL)]"
 
-If you find apartments that are close to matching but don't quite meet all criteria, respond with:
-"CLOSE - Found apartments close to matching: [list ONLY the close matches with: Name - Price - Bedrooms - Location - [URL](URL) - What criteria they miss]"
-
-If you find apartment listings but none match or are close to matching, respond with:
+If you find apartment listings but none match ALL mandatory criteria, respond with:
 "NO - No suitable apartments found"
 
 If you can't find any apartment listings at all, respond with:
@@ -106,7 +101,7 @@ DO NOT include:
 - Detailed reasoning about why apartments don't match
 - Repetitive information
 
-Keep responses clean and focused only on the relevant matches and close matches.
+Keep responses clean and focused only on apartments that meet ALL mandatory criteria.
 
 FLATTENED HTML CONTENT:
 ${flattenedHtml}`;

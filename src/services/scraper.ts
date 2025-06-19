@@ -61,7 +61,6 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     const filepath = path.join(debugDir, filename);
 
     await fs.writeFile(filepath, html, "utf8");
-    logger.info(`[${agency.name}] Saved HTML to: ${filepath}`);
 
     // Also save a screenshot for visual debugging
     const screenshotPath = path.join(
@@ -72,7 +71,6 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
       path: screenshotPath,
       fullPage: true,
     });
-    logger.info(`[${agency.name}] Saved screenshot to: ${screenshotPath}`);
 
     logger.info(`[${agency.name}] Received ${html.length} characters`);
 
@@ -114,7 +112,6 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
 
     // Use selector from config or fall back to body
     const selector = agency.selector || "body";
-    logger.info(`[${agency.name}] Using selector: ${selector}`);
 
     // Extract content using the selector
     const $ = cheerio.load(data);

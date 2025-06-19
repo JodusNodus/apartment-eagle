@@ -32,6 +32,7 @@ function scheduleNextRun(): void {
 }
 
 async function main(): Promise<void> {
+  logger.info("Starting cycle");
   try {
     validateConfig();
     logger.info("Starting apartment watcher...");
@@ -86,7 +87,7 @@ async function main(): Promise<void> {
                 newUrls
               );
 
-              if (evaluation.includes("YES") || evaluation.includes("CLOSE")) {
+              if (evaluation.includes("YES")) {
                 logger.info(`[${listing.agency}] Found matching apartments`);
                 return {
                   agency: listing.agency,
@@ -148,8 +149,6 @@ async function main(): Promise<void> {
     if (evaluations.length > 0) {
       await sendBatchNotification(evaluations);
       logger.info(`Sent notification for ${evaluations.length} agencies`);
-    } else {
-      logger.info("No new apartments found");
     }
 
     await saveScrapedUrls(currentScrapedUrls);

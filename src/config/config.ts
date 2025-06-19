@@ -93,6 +93,11 @@ export const config = {
       selector: "div.px-8:nth-child(3)",
       javascript: true,
     },
+    {
+      name: "Huyzen",
+      selector: ".property-tiles-grid",
+      url: "https://www.huyzen.be/te-huur/antwerpen-2000-regio/alle?category[]=flat&price[]=950&price[]=1300&view=list",
+    },
   ] as Agency[],
 };
 
