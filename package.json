@@ -1,8 +1,8 @@
 {
-  "name": "appartement-watcher",
+  "name": "apartment-eagle",
   "version": "1.0.0",
   "type": "module",
-  "description": "A Node.js app that scrapes rental agencies in Antwerp and monitors for new apartments using ChatGPT for evaluation",
+  "description": "A Node.js application that checks rental agency websites in Antwerp and notifies you when new apartments match your criteria.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -26,7 +26,7 @@
     "html-to-text": "^9.0.5",
     "nodemailer": "^6.9.7",
     "openai": "^4.20.1",
-    "puppeteer": "^24.10.2",
+    "puppeteer": "^21.11.0",
     "winston": "^3.11.0"
   },
   "devDependencies": {

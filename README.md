@@ -1,10 +1,10 @@
-# Apartment Watcher
+# Apartment Eagle
 
 A Node.js application that checks rental agency websites in Antwerp and notifies you when new apartments match your criteria.
 
 ## How It Works
 
-The apartment watcher follows these simple steps:
+The apartment eagle follows these simple steps:
 
 1. **Check All Agencies** - Looks at all rental agency websites
 2. **Find New Listings** - Identifies new apartment listings across all agencies
@@ -40,9 +40,6 @@ SCRAPE_INTERVAL_MINUTES=30
 MAX_SCRAPE_INTERVAL_MINUTES=45
 MAX_RETRIES=3
 REQUEST_DELAY_MS=2000
-
-# Optional: Server configuration
-PORT=3000
 
 # Optional: Logging
 LOG_LEVEL=info
