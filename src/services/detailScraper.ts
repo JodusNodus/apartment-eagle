@@ -77,7 +77,7 @@ async function scrapeDetailPageWithPuppeteer(
     });
 
     // Wait a bit more for any delayed content
-    await page.waitForTimeout(2000);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Get the rendered HTML
     const html = await page.content();

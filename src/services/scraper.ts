@@ -20,7 +20,7 @@ export async function getSharedBrowser(): Promise<Browser> {
   if (!sharedBrowser) {
     logger.info("Creating shared Puppeteer browser instance");
     sharedBrowser = await puppeteer.launch({
-      headless: "new",
+      headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -65,7 +65,7 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     });
 
     // Wait a bit more for any delayed content
-    await page.waitForTimeout(2000);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Get the rendered HTML
     const html = await page.content();
