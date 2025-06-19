@@ -1,0 +1,49 @@
+{
+  "name": "appartement-watcher",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A Node.js app that scrapes rental agencies in Antwerp and monitors for new apartments using ChatGPT for evaluation",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "scraping",
+    "rental",
+    "antwerp",
+    "chatgpt",
+    "monitoring"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.7",
+    "openai": "^4.20.1",
+    "puppeteer": "^21.5.2",
+    "showdown": "^2.1.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.0.3",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^6.4.17",
+    "@types/showdown": "^2.0.6",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.0.0"
+  }
+}
