@@ -33,7 +33,7 @@ EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password_here
-EMAIL_TO=recipient@example.com
+EMAIL_TO=recipient1@example.com,recipient2@example.com,recipient3@example.com
 
 # Optional: How often to check (in minutes)
 SCRAPE_INTERVAL_MINUTES=30

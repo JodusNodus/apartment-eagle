@@ -8,6 +8,14 @@ export interface Agency {
   javascript?: boolean;
 }
 
+export interface EmailConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  to: string[];
+}
+
 export const config = {
   openai: {
     apiKey: process.env.DEEPSEEK_API_KEY,
@@ -17,8 +25,8 @@ export const config = {
     port: parseInt(process.env.EMAIL_PORT || "587"),
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
-    to: process.env.EMAIL_TO,
-  },
+    to: process.env.EMAIL_TO?.split(",").map((email) => email.trim()) || [],
+  } as EmailConfig,
   scraping: {
     intervalMinutes: parseInt(process.env.SCRAPE_INTERVAL_MINUTES || "30"),
     maxIntervalMinutes: parseInt(

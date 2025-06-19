@@ -15,14 +15,15 @@ const transporter = nodemailer.createTransport({
 export async function sendBatchNotification(
   evaluations: Array<{ agency: string; evaluation: string; url: string }>
 ): Promise<void> {
-  logger.info(
-    `Attempting to send batch email notification for ${evaluations.length} agencies`
-  );
-  logger.info(`Email will be sent to: ${config.email.to}`);
+  // Check if we have any recipients
+  if (config.email.to.length === 0) {
+    logger.warn("No email recipients configured, skipping notification");
+    return;
+  }
 
   const mailOptions = {
     from: config.email.user,
-    to: config.email.to,
+    to: config.email.to.join(", "), // Join multiple emails with commas
     subject: `New Apartments Found: ${evaluations.length} listings`,
     text: `New apartment listings found!`,
     html: `
@@ -39,12 +40,14 @@ export async function sendBatchNotification(
   try {
     await transporter.sendMail(mailOptions);
     logger.info(
-      `Batch notification sent successfully with ${evaluations.length} URLs`
+      `Batch notification sent successfully with ${evaluations.length} URLs to ${config.email.to.length} recipients`
     );
   } catch (error: any) {
     logger.error(`Error sending batch notification: ${error.message}`);
     logger.error(
-      `Email configuration: host=${config.email.host}, port=${config.email.port}, user=${config.email.user}, to=${config.email.to}`
+      `Email configuration: host=${config.email.host}, port=${
+        config.email.port
+      }, user=${config.email.user}, to=${config.email.to.join(", ")}`
     );
   }
 }

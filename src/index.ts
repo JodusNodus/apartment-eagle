@@ -2,11 +2,7 @@ import "dotenv/config";
 import { config, validateConfig } from "./config/config.js";
 import logger from "./utils/logger.js";
 import { scrapeAllAgencies, closeSharedBrowser } from "./services/scraper.js";
-import {
-  saveListings,
-  loadScrapedUrls,
-  saveScrapedUrls,
-} from "./services/watcher.js";
+import { loadScrapedUrls, saveScrapedUrls } from "./services/watcher.js";
 import { extractUrlsFromHtml } from "./utils/urlExtractor.js";
 import {
   classifyUrlsBatch,
@@ -17,7 +13,6 @@ import { evaluateAllProperties } from "./services/detailEvaluator.js";
 import { sendBatchNotification } from "./services/notifier.js";
 
 import { Listing } from "./services/scraper.js";
-import { PropertyDetail } from "./services/detailScraper.js";
 import { PropertyEvaluation } from "./services/detailEvaluator.js";
 
 // Function to get random interval between min and max
@@ -119,7 +114,6 @@ async function main(): Promise<void> {
         currentScrapedUrls[agency] = currentUrls;
       });
       await saveScrapedUrls(currentScrapedUrls);
-      await saveListings(current);
       logger.info("Cycle completed - no new URLs");
       return;
     }
@@ -131,18 +125,15 @@ async function main(): Promise<void> {
     // Step 4: Handle URL classification or skip if only 1 URL
     let allClassifications: UrlClassification[];
 
-    if (allNewUrls.length === 1) {
+    if (allNewUrls.length < 4) {
       logger.info(
-        "Only 1 new URL found, skipping classification and assuming it's a detail page"
+        `Only ${allNewUrls.length} new URLs found, skipping classification and assuming it's a detail page`
       );
-      // Create a mock classification assuming it's a detail page
-      allClassifications = [
-        {
-          url: allNewUrls[0].url,
-          isListingDetail: true,
-          confidence: 8,
-        },
-      ];
+      allClassifications = allNewUrls.map((url) => ({
+        url: url.url,
+        isListingDetail: true,
+        confidence: 8,
+      }));
     } else {
       // Step 4: Batch classify all new URLs together
       allClassifications = await classifyUrlsBatch(allNewUrls);
@@ -218,7 +209,6 @@ async function main(): Promise<void> {
     });
 
     await saveScrapedUrls(currentScrapedUrls);
-    await saveListings(current);
     logger.info("Cycle completed");
   } catch (error: any) {
     logger.error(`Fatal error: ${error.message}`);

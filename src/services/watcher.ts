@@ -1,16 +1,9 @@
 import fs from "fs-extra";
 import path from "path";
 import logger from "../utils/logger.js";
-import { Listing } from "./scraper.js";
 
 const DATA_DIR = "data";
-const LISTINGS_FILE = path.join(DATA_DIR, "listings.json");
 const SCRAPED_URLS_FILE = path.join(DATA_DIR, "scraped_urls.json");
-
-export async function saveListings(listings: Listing[]): Promise<void> {
-  await fs.ensureFile(LISTINGS_FILE);
-  await fs.writeJson(LISTINGS_FILE, listings, { spaces: 2 });
-}
 
 export async function loadScrapedUrls(): Promise<Record<string, string[]>> {
   try {
