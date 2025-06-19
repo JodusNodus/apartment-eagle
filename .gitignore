@@ -105,3 +105,4 @@ data/
 !package.json
 !package-lock.json
 !tsconfig.json 
+debug/

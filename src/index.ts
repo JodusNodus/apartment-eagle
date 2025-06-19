@@ -14,6 +14,24 @@ import cron from "node-cron";
 
 import { Listing } from "./services/scraper.js";
 
+// Function to get random interval between min and max
+function getRandomInterval(): number {
+  const min = config.scraping.intervalMinutes;
+  const max = config.scraping.maxIntervalMinutes;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Function to schedule next run with random interval
+function scheduleNextRun(): void {
+  const interval = getRandomInterval();
+  logger.info(`Scheduling next scrape in ${interval} minutes`);
+
+  setTimeout(async () => {
+    await main();
+    scheduleNextRun(); // Schedule the next run
+  }, interval * 60 * 1000);
+}
+
 async function main(): Promise<void> {
   try {
     validateConfig();
@@ -121,8 +139,8 @@ async function main(): Promise<void> {
   }
 }
 
-// Schedule the watcher
-cron.schedule(`*/${config.scraping.intervalMinutes} * * * *`, main);
-
-// Run immediately on startup
+// Start the first run immediately
 main();
+
+// Schedule subsequent runs with random intervals
+scheduleNextRun();

@@ -107,13 +107,13 @@ DO NOT include:
 
 Keep responses clean and focused only on the relevant matches and close matches.
 
-FLATTENED HTML CONTENT (first 50,000 characters):
+FLATTENED HTML CONTENT:
 ${flattenedHtml}`;
 
     const response = await deepseek.chat.completions.create({
       model: "deepseek-chat",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1500,
+      max_tokens: 15000,
       temperature: 0.1,
     });
     const answer = response.choices[0].message.content?.trim() || "ERROR";
