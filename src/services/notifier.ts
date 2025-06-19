@@ -76,7 +76,6 @@ export async function sendBatchNotification(
       return `
       <div style="margin-bottom: 30px; border: 1px solid #ddd; border-radius: 8px; padding: 20px;">
         <h3 style="margin-top: 0; color: #007cba;">${agency}</h3>
-        <p><strong>Agency URL:</strong> <a href="${url}">${url}</a></p>
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; border-left: 4px solid #007cba;">
           ${evaluationHtml}
         </div>
@@ -95,10 +94,6 @@ export async function sendBatchNotification(
       .map((e) => `${e.agency}:\n${e.evaluation}\n`)
       .join("\n")}`,
     html: `
-      <h2>New Apartments Found!</h2>
-      <p><strong>Timestamp:</strong> ${timestamp}</p>
-      <p><strong>Agencies with updates:</strong> ${evaluations.length}</p>
-      <hr style="margin: 20px 0;">
       ${evaluationHtmls}
     `,
   };
