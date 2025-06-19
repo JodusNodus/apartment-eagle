@@ -148,6 +148,22 @@ export const config = {
       url: "https://www.resa-vastgoed.be/nl/te-huur?view=list&page=1&pricemin=900&pricemax=1500",
       selector: ".custom-property-list",
     },
+    {
+      name: "Immovasta",
+      url: "https://www.immovasta.be/panden/te-huur/?types=2&max_price=1300",
+      selector: ".apartment-list",
+    },
+    {
+      name: "Reds",
+      url: "https://www.reds.be/te-huur/antwerpen-2000-regio/appartement?price[]=900&price[]=1300&view=list",
+      selector: ".grid--property-tiles",
+    },
+    {
+      name: "Abricasa",
+      url: "https://www.abricasa.be/nl/te-huur/?region=ANTWERPEN%7C2000-2018-2020-2060-2150%2CBERCHEM%7C2600&type=3&budget=900-1300&order=",
+      selector: ".property-list-page",
+      javascript: true,
+    },
   ] as Agency[],
 };
 

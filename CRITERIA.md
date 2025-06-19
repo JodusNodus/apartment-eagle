@@ -5,6 +5,7 @@
 - Must cost less than 1300 EUR/month (1,300 or 1300 or 1300.00)
 - Must cost more than 900 EUR/month (900 or 900.00)
 - If a move-in date is provided, it must be after July 30th, if it is not provided, it is not a problem. "Onmiddellijk" is a no-go.
+- Cannot be in Optie / Option already or Verhuurd
 
 ### OPTIONAL preferences (nice to have, but not required):
 
