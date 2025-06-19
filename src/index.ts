@@ -128,9 +128,26 @@ async function main(): Promise<void> {
       `Found ${allNewUrls.length} new URLs across all agencies, starting batch classification`
     );
 
-    // Step 4: Batch classify all new URLs together
-    const allClassifications = await classifyUrlsBatch(allNewUrls);
-    logger.info(`Batch classified ${allClassifications.length} URLs`);
+    // Step 4: Handle URL classification or skip if only 1 URL
+    let allClassifications: UrlClassification[];
+
+    if (allNewUrls.length === 1) {
+      logger.info(
+        "Only 1 new URL found, skipping classification and assuming it's a detail page"
+      );
+      // Create a mock classification assuming it's a detail page
+      allClassifications = [
+        {
+          url: allNewUrls[0].url,
+          isListingDetail: true,
+          confidence: 8,
+        },
+      ];
+    } else {
+      // Step 4: Batch classify all new URLs together
+      allClassifications = await classifyUrlsBatch(allNewUrls);
+      logger.info(`Batch classified ${allClassifications.length} URLs`);
+    }
 
     // Step 5: Group classifications by agency and process detail pages
     const agencyClassifications = new Map<string, UrlClassification[]>();

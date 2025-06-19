@@ -129,6 +129,12 @@ export const config = {
       url: "https://www.dewaele.com/nl/te-huur/alle?filter%5Bcity_ids%5D%5B%5D=2834&filter%5Bstatuses%5D%5B%5D=Te+huur&filter%5Btypes%5D%5B%5D=Appartement&filter%5Bprice%5D%5Bmin%5D=&filter%5Bprice%5D%5Bmax%5D=1300&filter%5Bbedrooms%5D%5Bmin%5D=1&filter%5Bbedrooms%5D%5Bmax%5D=&filter%5Bsurface_built%5D%5Bmin%5D=&filter%5Bsurface_built%5D%5Bmax%5D=&filter%5Bsurface_plot%5D%5Bmin%5D=&filter%5Bsurface_plot%5D%5Bmax%5D=&filter%5Bsurface_livable%5D%5Bmin%5D=75&filter%5Bsurface_livable%5D%5Bmax%5D=&filter%5Bsurface_trading%5D%5Bmin%5D=&filter%5Bsurface_trading%5D%5Bmax%5D=&filter%5Bsurface_office%5D%5Bmin%5D=&filter%5Bsurface_office%5D%5Bmax%5D=&filter%5Bsurface_storage%5D%5Bmin%5D=&filter%5Bsurface_storage%5D%5Bmax%5D=&filter%5Bbathrooms%5D%5Bmin%5D=&filter%5Bbathrooms%5D%5Bmax%5D=&filter%5Bparking_spots%5D%5Bmin%5D=&filter%5Bparking_spots%5D%5Bmax%5D=&filter%5Bgarden%5D=&filter%5Bterrace%5D=&filter%5Bground_floor%5D=&filter%5Bfloor%5D%5Bmin%5D=&filter%5Bfloor%5D%5Bmax%5D=&filter%5Bsea_view%5D=&filter%5Bgarage%5D=&filter%5Bswimming_pool%5D=&filter%5Belevator%5D=&filter%5Bbike_storage%5D=&filter%5Bfurnished%5D=&filter%5Bsurface_terrace%5D%5Bmin%5D=&filter%5Bsurface_terrace%5D%5Bmax%5D=&filter%5Bloading_docks%5D%5Bmin%5D=&filter%5Bloading_docks%5D%5Bmax%5D=&filter%5Bfree_height%5D%5Bmin%5D=&filter%5Bfree_height%5D%5Bmax%5D=&filter%5Bkva%5D%5Bmin%5D=&filter%5Bkva%5D%5Bmax%5D=&filter%5Blight_street%5D=&filter%5Brolling_bridge%5D=&filter%5Brented%5D=",
       selector: "#property-list",
     },
+    {
+      name: "Area",
+      url: "https://www.area.be/nl/te-huur/?region=&type=2&bedrooms=1&budget=900-1300",
+      selector: ".property-list-page",
+      javascript: true,
+    },
   ] as Agency[],
 };
 

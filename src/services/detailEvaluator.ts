@@ -44,16 +44,11 @@ export async function evaluatePropertyDetail(
   property: PropertyDetail
 ): Promise<PropertyEvaluation> {
   try {
-    logger.info(`[${property.agency}] Evaluating property: ${property.url}`);
-
     // Use provided criteria or load from file
     const evaluationCriteria = await getCriteria();
 
     // Flatten and simplify the HTML
     const flattenedHtml = flattenHTML(property.html);
-    logger.info(
-      `[${property.agency}] Flattened HTML length: ${flattenedHtml.length}`
-    );
 
     const prompt = `You are analyzing a rental property detail page to determine if it matches the given criteria.
 

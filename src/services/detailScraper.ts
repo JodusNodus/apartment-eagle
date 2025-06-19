@@ -29,10 +29,6 @@ async function scrapeDetailPageWithHttp(
     const $ = cheerio.load(data);
     const cleanHtml = $.html();
 
-    logger.info(
-      `[${agencyName}] Successfully scraped detail page with HTTP: ${url}`
-    );
-
     return {
       url,
       agency: agencyName,
@@ -81,10 +77,6 @@ async function scrapeDetailPageWithPuppeteer(
 
     // Get the rendered HTML
     const html = await page.content();
-
-    logger.info(
-      `[${agencyName}] Successfully scraped detail page with Puppeteer: ${url}`
-    );
 
     return {
       url,
