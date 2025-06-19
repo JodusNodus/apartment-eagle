@@ -143,6 +143,11 @@ export const config = {
       selector: ".property-list-page",
       javascript: true,
     },
+    {
+      name: "Resa Vastgoed",
+      url: "https://www.resa-vastgoed.be/nl/te-huur?view=list&page=1&pricemin=900&pricemax=1500",
+      selector: ".custom-property-list",
+    },
   ] as Agency[],
 };
 

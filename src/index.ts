@@ -105,7 +105,12 @@ async function main(): Promise<void> {
       });
     });
 
-    if (allNewUrls.length === 0) {
+    // Remove duplicate URLs (keep the first occurrence)
+    const uniqueUrls = allNewUrls.filter(
+      (item, index, self) => index === self.findIndex((t) => t.url === item.url)
+    );
+
+    if (uniqueUrls.length === 0) {
       logger.info("No new URLs found across all agencies");
 
       // Save current URLs and exit
@@ -118,25 +123,34 @@ async function main(): Promise<void> {
       return;
     }
 
+    // Log if duplicates were found
+    if (uniqueUrls.length < allNewUrls.length) {
+      logger.info(
+        `Removed ${allNewUrls.length - uniqueUrls.length} duplicate URLs (${
+          allNewUrls.length
+        } -> ${uniqueUrls.length})`
+      );
+    }
+
     logger.info(
-      `Found ${allNewUrls.length} new URLs across all agencies, starting batch classification`
+      `Found ${uniqueUrls.length} unique new URLs across all agencies, starting batch classification`
     );
 
     // Step 4: Handle URL classification or skip if only 1 URL
     let allClassifications: UrlClassification[];
 
-    if (allNewUrls.length < 4) {
+    if (uniqueUrls.length < 4) {
       logger.info(
-        `Only ${allNewUrls.length} new URLs found, skipping classification and assuming it's a detail page`
+        `Only ${uniqueUrls.length} new URLs found, skipping classification and assuming it's a detail page`
       );
-      allClassifications = allNewUrls.map((url) => ({
+      allClassifications = uniqueUrls.map((url) => ({
         url: url.url,
         isListingDetail: true,
         confidence: 8,
       }));
     } else {
       // Step 4: Batch classify all new URLs together
-      allClassifications = await classifyUrlsBatch(allNewUrls);
+      allClassifications = await classifyUrlsBatch(uniqueUrls);
       logger.info(`Batch classified ${allClassifications.length} URLs`);
     }
 
@@ -144,7 +158,7 @@ async function main(): Promise<void> {
     const agencyClassifications = new Map<string, UrlClassification[]>();
 
     allClassifications.forEach((classification) => {
-      const agency = allNewUrls.find(
+      const agency = uniqueUrls.find(
         (u) => u.url === classification.url
       )?.agency;
       if (agency) {
