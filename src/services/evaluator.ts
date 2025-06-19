@@ -87,7 +87,7 @@ Also filter out any apartments whose URLs are listed in the EXCLUDE section.
 RESPONSE FORMAT - Keep it concise and clean:
 
 If you find ANY apartment listings that match ALL mandatory criteria, respond with:
-"YES - Found matching apartment(s): [list ONLY the matching apartments with: Name - Price - Bedrooms - Location - [URL](URL)]"
+"YES - Found matching apartment(s): [list ONLY the matching apartments with: [URL](URL)]"
 
 If you find apartment listings but none match ALL mandatory criteria, respond with:
 "NO - No suitable apartments found"

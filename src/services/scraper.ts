@@ -19,7 +19,7 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     logger.info(`[${agency.name}] Scraping with Puppeteer`);
 
     browser = await puppeteer.launch({
-      headless: true,
+      headless: "new",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -56,16 +56,11 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     // Save HTML to file for debugging
     const debugDir = path.resolve("debug");
     await fs.ensureDir(debugDir);
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `${agency.name.replace(/\s+/g, "_")}_${timestamp}.html`;
-    const filepath = path.join(debugDir, filename);
-
-    await fs.writeFile(filepath, html, "utf8");
 
     // Also save a screenshot for visual debugging
     const screenshotPath = path.join(
       debugDir,
-      `${agency.name.replace(/\s+/g, "_")}_${timestamp}.png`
+      `${agency.name.replace(/\s+/g, "_")}.png`
     );
     await page.screenshot({
       path: screenshotPath,
