@@ -98,6 +98,37 @@ export const config = {
       selector: ".property-tiles-grid",
       url: "https://www.huyzen.be/te-huur/antwerpen-2000-regio/alle?category[]=flat&price[]=950&price[]=1300&view=list",
     },
+    {
+      name: "One Vastgoed",
+      url: "https://onevastgoed.be/nl/te-huur?type=1&price-min=950&price-max=1300",
+      selector: ".loader",
+      javascript: true,
+    },
+    {
+      name: "Clissen Immo",
+      url: "https://www.clissenimmo.be/nl/te-huur?view=list&page=1&ptype=2&cities=ANTWERPEN&pricemin=1000&pricemax=1500",
+      selector: ".property-list",
+    },
+    {
+      name: "Reant",
+      url: "https://www.reant.be/nl/te-huur?view=list&page=1&pricemin=1000&pricemax=1500&ptype=2&cities=ANTWERPEN",
+      selector: "ul.productdetails:nth-child(4)",
+    },
+    {
+      name: "Demeester",
+      url: "https://www.demeester.eu/nl/huren?type%5B%5D=appartement&minPrice=1000&maxPrice=1500&bedrooms=1",
+      selector: "section.listing",
+    },
+    {
+      name: "Sorenco",
+      url: "https://www.sorenco.be/aanbod/te-huur/appartementen/kamers-1/max-1500-euro/",
+      selector: "#properties",
+    },
+    {
+      name: "De Waele",
+      url: "https://www.dewaele.com/nl/te-huur/alle?filter%5Bcity_ids%5D%5B%5D=2834&filter%5Bstatuses%5D%5B%5D=Te+huur&filter%5Btypes%5D%5B%5D=Appartement&filter%5Bprice%5D%5Bmin%5D=&filter%5Bprice%5D%5Bmax%5D=1300&filter%5Bbedrooms%5D%5Bmin%5D=1&filter%5Bbedrooms%5D%5Bmax%5D=&filter%5Bsurface_built%5D%5Bmin%5D=&filter%5Bsurface_built%5D%5Bmax%5D=&filter%5Bsurface_plot%5D%5Bmin%5D=&filter%5Bsurface_plot%5D%5Bmax%5D=&filter%5Bsurface_livable%5D%5Bmin%5D=75&filter%5Bsurface_livable%5D%5Bmax%5D=&filter%5Bsurface_trading%5D%5Bmin%5D=&filter%5Bsurface_trading%5D%5Bmax%5D=&filter%5Bsurface_office%5D%5Bmin%5D=&filter%5Bsurface_office%5D%5Bmax%5D=&filter%5Bsurface_storage%5D%5Bmin%5D=&filter%5Bsurface_storage%5D%5Bmax%5D=&filter%5Bbathrooms%5D%5Bmin%5D=&filter%5Bbathrooms%5D%5Bmax%5D=&filter%5Bparking_spots%5D%5Bmin%5D=&filter%5Bparking_spots%5D%5Bmax%5D=&filter%5Bgarden%5D=&filter%5Bterrace%5D=&filter%5Bground_floor%5D=&filter%5Bfloor%5D%5Bmin%5D=&filter%5Bfloor%5D%5Bmax%5D=&filter%5Bsea_view%5D=&filter%5Bgarage%5D=&filter%5Bswimming_pool%5D=&filter%5Belevator%5D=&filter%5Bbike_storage%5D=&filter%5Bfurnished%5D=&filter%5Bsurface_terrace%5D%5Bmin%5D=&filter%5Bsurface_terrace%5D%5Bmax%5D=&filter%5Bloading_docks%5D%5Bmin%5D=&filter%5Bloading_docks%5D%5Bmax%5D=&filter%5Bfree_height%5D%5Bmin%5D=&filter%5Bfree_height%5D%5Bmax%5D=&filter%5Bkva%5D%5Bmin%5D=&filter%5Bkva%5D%5Bmax%5D=&filter%5Blight_street%5D=&filter%5Brolling_bridge%5D=&filter%5Brented%5D=",
+      selector: "#property-list",
+    },
   ] as Agency[],
 };
 
