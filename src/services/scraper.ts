@@ -16,9 +16,7 @@ export interface Listing {
 async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
   let browser;
   try {
-    logger.info(
-      `Scraping ${agency.name} with Puppeteer (JavaScript rendering) at ${agency.url}`
-    );
+    logger.info(`[${agency.name}] Scraping with Puppeteer`);
 
     browser = await puppeteer.launch({
       headless: true,
@@ -63,11 +61,7 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     const filepath = path.join(debugDir, filename);
 
     await fs.writeFile(filepath, html, "utf8");
-    logger.info(`Saved Puppeteer HTML for ${agency.name} to: ${filepath}`);
-
-    // Log a sample of the HTML for quick debugging
-    const sampleHtml = html.substring(0, 2000).replace(/\s+/g, " ");
-    logger.info(`Sample HTML from ${agency.name}: ${sampleHtml}...`);
+    logger.info(`[${agency.name}] Saved HTML to: ${filepath}`);
 
     // Also save a screenshot for visual debugging
     const screenshotPath = path.join(
@@ -78,13 +72,9 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
       path: screenshotPath,
       fullPage: true,
     });
-    logger.info(
-      `Saved Puppeteer screenshot for ${agency.name} to: ${screenshotPath}`
-    );
+    logger.info(`[${agency.name}] Saved screenshot to: ${screenshotPath}`);
 
-    logger.info(
-      `Received ${html.length} characters from ${agency.name} (Puppeteer)`
-    );
+    logger.info(`[${agency.name}] Received ${html.length} characters`);
 
     return {
       agency: agency.name,
@@ -93,9 +83,7 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
       timestamp: new Date(),
     };
   } catch (error: any) {
-    logger.error(
-      `Error scraping ${agency.name} with Puppeteer: ${error.message}`
-    );
+    logger.error(`[${agency.name}] Puppeteer error: ${error.message}`);
     return {
       agency: agency.name,
       url: agency.url,
@@ -116,7 +104,7 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
       return await scrapeWithPuppeteer(agency);
     }
 
-    logger.info(`Scraping ${agency.name} at ${agency.url}`);
+    logger.info(`[${agency.name}] Scraping`);
     const { data } = await axios.get(agency.url, {
       headers: {
         "User-Agent":
@@ -126,7 +114,7 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
 
     // Use selector from config or fall back to body
     const selector = agency.selector || "body";
-    logger.info(`Using selector for ${agency.name}: ${selector}`);
+    logger.info(`[${agency.name}] Using selector: ${selector}`);
 
     // Extract content using the selector
     const $ = cheerio.load(data);
@@ -134,7 +122,7 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
 
     if (!bodyContent) {
       logger.warn(
-        `Selector "${selector}" for ${agency.name} found no content, using full page`
+        `[${agency.name}] Selector found no content, using full page`
       );
       return {
         agency: agency.name,
@@ -153,17 +141,7 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
 
     const cleanContent = $clean.html() || bodyContent;
 
-    logger.info(
-      `Received ${cleanContent.length} characters from ${agency.name} (cleaned)`
-    );
-
-    // Log some sample content to see what we're getting
-    const sampleText = $clean
-      .text()
-      .substring(0, 1000)
-      .replace(/\s+/g, " ")
-      .trim();
-    logger.info(`Sample text content: ${sampleText}...`);
+    logger.info(`[${agency.name}] Received ${cleanContent.length} characters`);
 
     return {
       agency: agency.name,
@@ -172,7 +150,7 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
       timestamp: new Date(),
     };
   } catch (error: any) {
-    logger.error(`Error scraping ${agency.name}: ${error.message}`);
+    logger.error(`[${agency.name}] Scraping error: ${error.message}`);
     return {
       agency: agency.name,
       url: agency.url,
@@ -183,12 +161,19 @@ export async function scrapeAgency(agency: Agency): Promise<Listing> {
 }
 
 export async function scrapeAllAgencies(): Promise<Listing[]> {
-  const allListings: Listing[] = [];
-  for (const agency of config.agencies) {
-    const listing = await scrapeAgency(agency);
-    if (listing.html) {
-      allListings.push(listing);
+  const scrapingPromises = config.agencies.map(async (agency) => {
+    try {
+      const listing = await scrapeAgency(agency);
+      if (listing.html) {
+        return listing;
+      }
+      return null;
+    } catch (error: any) {
+      logger.error(`Failed to scrape ${agency.name}: ${error.message}`);
+      return null;
     }
-  }
-  return allListings;
+  });
+
+  const results = await Promise.all(scrapingPromises);
+  return results.filter((listing): listing is Listing => listing !== null);
 }

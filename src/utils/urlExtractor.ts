@@ -1,21 +1,4 @@
 /**
- * Debug function to show all href attributes in HTML
- */
-export function debugAllHrefs(html: string): string[] {
-  const hrefPattern = /href=["']([^"']+)["']/gi;
-  const matches = html.matchAll(hrefPattern);
-  const allHrefs: string[] = [];
-
-  for (const match of matches) {
-    if (match[1]) {
-      allHrefs.push(match[1]);
-    }
-  }
-
-  return allHrefs;
-}
-
-/**
  * Extracts URLs from HTML content
  * Uses a more comprehensive approach to find property-related URLs
  */

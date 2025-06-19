@@ -14,6 +14,7 @@ const DEFAULT_CRITERIA = `MANDATORY requirements (all must be met):
 - Must be in Antwerp
 - Must have at least 2 bedrooms (or 1 bedroom and a bureau)
 - Must cost less than 1300 EUR/month (1,300 or 1300 or 1300.00)
+- Must cost more than 950 EUR/month (950 or 950.00)
 - If a move-in date is provided, it must be after July 30th, if it is not provided, it is not a problem
 
 OPTIONAL preferences (nice to have, but not required):
@@ -113,7 +114,7 @@ ${flattenedHtml}`;
     const response = await deepseek.chat.completions.create({
       model: "deepseek-chat",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 15000,
+      max_tokens: 8192,
       temperature: 0.1,
     });
     const answer = response.choices[0].message.content?.trim() || "ERROR";
