@@ -106,3 +106,5 @@ data/
 !package-lock.json
 !tsconfig.json 
 debug/
+
+/src/generated/prisma

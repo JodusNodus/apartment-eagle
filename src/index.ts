@@ -2,7 +2,11 @@ import "dotenv/config";
 import { config, validateConfig } from "./config/config.js";
 import logger from "./utils/logger.js";
 import { scrapeAllAgencies, closeSharedBrowser } from "./services/scraper.js";
-import { loadScrapedUrls, saveScrapedUrls } from "./services/watcher.js";
+import {
+  loadScrapedUrls,
+  saveScrapedUrls,
+  closeDatabase,
+} from "./services/database.js";
 import { extractUrlsFromHtml } from "./utils/urlExtractor.js";
 import {
   classifyUrlsBatch,
@@ -38,6 +42,7 @@ function setupGracefulShutdown(): void {
   const shutdown = async () => {
     logger.info("Shutting down gracefully...");
     await closeSharedBrowser();
+    await closeDatabase();
     process.exit(0);
   };
 
@@ -45,7 +50,7 @@ function setupGracefulShutdown(): void {
   process.on("SIGTERM", shutdown);
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   logger.info("Starting cycle");
   try {
     validateConfig();
