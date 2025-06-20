@@ -25,6 +25,9 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
+MIN_PRICE=900
+MAX_PRICE=1300
+
 # DeepSeek API Key for AI evaluation
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
 
@@ -35,11 +38,7 @@ EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_password_here
 EMAIL_TO=recipient1@example.com,recipient2@example.com,recipient3@example.com
 
-# Optional: How often to check (in minutes)
 SCRAPE_INTERVAL_MINUTES=30
-MAX_SCRAPE_INTERVAL_MINUTES=45
-MAX_RETRIES=3
-REQUEST_DELAY_MS=2000
 
 # Optional: Logging
 LOG_LEVEL=info

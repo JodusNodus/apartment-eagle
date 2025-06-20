@@ -16,8 +16,9 @@ export interface EmailConfig {
   to: string[];
 }
 
-const MIN_PRICE = 900;
-const MAX_PRICE = 1300;
+// Make price range configurable via environment variables
+const MIN_PRICE = parseInt(process.env.MIN_PRICE || "900");
+const MAX_PRICE = parseInt(process.env.MAX_PRICE || "1300");
 
 export const config = {
   openai: {
@@ -38,6 +39,10 @@ export const config = {
   },
   logging: {
     level: process.env.LOG_LEVEL || "info",
+  },
+  prices: {
+    min: MIN_PRICE,
+    max: MAX_PRICE,
   },
   agencies: [
     {
@@ -75,7 +80,7 @@ export const config = {
     },
     {
       name: "De Boer en Partners",
-      url: "https://deboerenpartners.be/huur/appartement/2000-antwerpen+2018+2040-antwerpen+2050+2060+2100-antwerpen+2140-antwerpen+2170-antwerpen+2180-antwerpen+2600-antwerpen+2610-antwerpen+2660-antwerpen+2600-berchem+2140-borgerhout+2100-deurne+2180-ekeren+2610-wilrijk?priceRange%5B%5D=1000-1500&view=gallery",
+      url: "https://deboerenpartners.be/huur/appartement/2000-antwerpen+2018+2040-antwerpen+2050+2060+2100-antwerpen+2140-antwerpen+2170-antwerpen+2180-antwerpen+2600-antwerpen+2610-antwerpen+2660-antwerpen+2600-berchem+2140-borgerhout+2100-deurne+2180-ekeren+2610-wilrijk?view=gallery",
       selector: "#estates-grid",
     },
     {
@@ -127,7 +132,7 @@ export const config = {
     },
     {
       name: "Sorenco",
-      url: "https://www.sorenco.be/aanbod/te-huur/appartementen/kamers-1/max-1500-euro/",
+      url: `https://www.sorenco.be/aanbod/te-huur/appartementen/kamers-1/max-${MAX_PRICE}-euro/`,
       selector: "#properties",
     },
     {
