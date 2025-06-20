@@ -4,7 +4,10 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "npm run build && node scripts/setup-db.js && node dist/index.js",
+    "preDeployCommand": [
+      "npx prisma generate && npx prisma db push --accept-data-loss"
+    ],
+    "startCommand": "npm run build && node dist/index.js",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
   }

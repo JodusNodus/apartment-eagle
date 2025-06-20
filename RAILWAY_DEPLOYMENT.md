@@ -16,7 +16,6 @@ Make sure your repository has these files:
 - ✅ `package.json` - Dependencies and scripts
 - ✅ `src/server.ts` - Web server with health check
 - ✅ `prisma/schema.prisma` - Database schema
-- ✅ `scripts/setup-db.js` - Database setup script
 - ✅ `CRITERIA.md` - Your apartment criteria
 
 ## Step 2: Sign Up for Railway
@@ -76,10 +75,6 @@ LOG_LEVEL=info
 ## Step 6: Run Database Migrations
 
 The database setup should run automatically during deployment, but if you encounter issues:
-
-### Option A: Automatic Setup (Recommended)
-
-The `scripts/setup-db.js` script runs automatically during deployment and should create the database tables.
 
 ### Option B: Manual Setup via Railway Shell
 
