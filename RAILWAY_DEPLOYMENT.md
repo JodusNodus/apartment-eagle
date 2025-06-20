@@ -16,6 +16,7 @@ Make sure your repository has these files:
 - ✅ `package.json` - Dependencies and scripts
 - ✅ `src/server.ts` - Web server with health check
 - ✅ `prisma/schema.prisma` - Database schema
+- ✅ `scripts/setup-db.js` - Database setup script
 - ✅ `CRITERIA.md` - Your apartment criteria
 
 ## Step 2: Sign Up for Railway
@@ -74,6 +75,14 @@ LOG_LEVEL=info
 
 ## Step 6: Run Database Migrations
 
+The database setup should run automatically during deployment, but if you encounter issues:
+
+### Option A: Automatic Setup (Recommended)
+
+The `scripts/setup-db.js` script runs automatically during deployment and should create the database tables.
+
+### Option B: Manual Setup via Railway Shell
+
 1. **Open Railway Shell**:
 
    - Go to your app service in Railway
@@ -85,7 +94,7 @@ LOG_LEVEL=info
 
    ```bash
    npx prisma generate
-   npx prisma db push
+   npx prisma db push --accept-data-loss
    ```
 
 3. **Verify Database**:
@@ -129,6 +138,39 @@ LOG_LEVEL=info
 - Check that PostgreSQL service is running
 - Verify `DATABASE_URL` is set correctly
 - Run `npx prisma db push` to create tables
+
+### "relation 'public.scraped_urls' does not exist" Error
+
+This error means the database table hasn't been created yet. Here's how to fix it:
+
+1. **Check Railway Logs**:
+
+   - Go to your Railway project
+   - Click on the latest deployment
+   - Look for database setup logs
+   - You should see "🎉 Database setup completed successfully!"
+
+2. **If Setup Failed**:
+
+   - Open Railway Shell (View Logs → Shell)
+   - Run these commands manually:
+
+   ```bash
+   npx prisma generate
+   npx prisma db push --accept-data-loss
+   ```
+
+3. **Verify Table Creation**:
+
+   ```bash
+   npx prisma studio
+   ```
+
+   You should see the `scraped_urls` table in the database.
+
+4. **Restart the App**:
+   - Go to your Railway project
+   - Click "Redeploy" to restart the app
 
 ### App Won't Start
 
