@@ -19,24 +19,6 @@ import { sendBatchNotification } from "./services/notifier.js";
 import { Listing } from "./services/scraper.js";
 import { PropertyEvaluation } from "./services/detailEvaluator.js";
 
-// Function to get random interval between min and max
-function getRandomInterval(): number {
-  const min = config.scraping.intervalMinutes;
-  const max = config.scraping.maxIntervalMinutes;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Function to schedule next run with random interval
-function scheduleNextRun(): void {
-  const interval = getRandomInterval();
-  logger.info(`Scheduling next scrape in ${interval} minutes`);
-
-  setTimeout(async () => {
-    await main();
-    scheduleNextRun(); // Schedule the next run
-  }, interval * 60 * 1000);
-}
-
 // Graceful shutdown handler
 function setupGracefulShutdown(): void {
   const shutdown = async () => {
@@ -237,8 +219,4 @@ export async function main(): Promise<void> {
 // Setup graceful shutdown
 setupGracefulShutdown();
 
-// Start the first run immediately
 main();
-
-// Schedule subsequent runs with random intervals
-scheduleNextRun();
