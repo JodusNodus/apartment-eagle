@@ -102,6 +102,7 @@ Thumbs.db
 # Application specific
 data/
 *.json
+!railway.json
 !package.json
 !package-lock.json
 !tsconfig.json 
