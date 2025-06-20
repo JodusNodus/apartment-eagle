@@ -27,9 +27,55 @@ export async function classifyUrlsBatch(
     return [];
   }
 
+  const BATCH_SIZE = 50; // Maximum URLs per batch
+  const allClassifications: UrlClassification[] = [];
+
+  // Process URLs in batches
+  for (let i = 0; i < urlsWithAgency.length; i += BATCH_SIZE) {
+    const batch = urlsWithAgency.slice(i, i + BATCH_SIZE);
+    const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
+    const totalBatches = Math.ceil(urlsWithAgency.length / BATCH_SIZE);
+
+    logger.info(
+      `Processing batch ${batchNumber}/${totalBatches} with ${batch.length} URLs`
+    );
+
+    try {
+      const batchClassifications = await classifySingleBatch(batch);
+      allClassifications.push(...batchClassifications);
+
+      logger.info(
+        `Batch ${batchNumber}/${totalBatches} completed: ${
+          batchClassifications.filter((c) => c.isListingDetail).length
+        } detail pages found`
+      );
+
+      // Add a small delay between batches to avoid rate limiting
+      if (i + BATCH_SIZE < urlsWithAgency.length) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    } catch (error: any) {
+      logger.error(
+        `Error in batch ${batchNumber}/${totalBatches}: ${error.message}`
+      );
+      // Continue with next batch instead of failing completely
+    }
+  }
+
+  const detailPages = allClassifications.filter((c) => c.isListingDetail);
+  logger.info(
+    `Completed all batches: ${detailPages.length} URLs classified as potential detail pages out of ${urlsWithAgency.length} total`
+  );
+
+  return allClassifications;
+}
+
+async function classifySingleBatch(
+  urlsWithAgency: UrlWithAgency[]
+): Promise<UrlClassification[]> {
   try {
     logger.info(
-      `Batch classifying ${urlsWithAgency.length} URLs from ${
+      `Classifying ${urlsWithAgency.length} URLs from ${
         new Set(urlsWithAgency.map((u) => u.agency)).size
       } agencies with DeepSeek`
     );
@@ -127,7 +173,7 @@ IMPORTANT: Return ONLY the JSON array, no markdown formatting, no code blocks, n
 
     return classifications;
   } catch (error: any) {
-    logger.error(`Error batch classifying URLs: ${error.message}`);
+    logger.error(`Error in single batch classification: ${error.message}`);
     throw error;
   }
 }
