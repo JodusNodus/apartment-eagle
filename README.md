@@ -14,13 +14,17 @@ The apartment eagle follows these simple steps:
 
 ## Setup
 
-### 1. Install Dependencies
+### 1. Update Your Search Criteria
+
+Edit the `CRITERIA.md` file to define what you're looking for in an apartment.
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Environment Variables
+### 3. Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -44,7 +48,7 @@ SCRAPE_INTERVAL_MINUTES=30
 LOG_LEVEL=info
 ```
 
-### 3. Email Setup
+### 4. Email Setup
 
 For Gmail:
 
@@ -52,7 +56,7 @@ For Gmail:
 2. Generate an "App Password"
 3. Use the app password as `EMAIL_PASS`
 
-### 4. DeepSeek API
+### 5. DeepSeek API
 
 Get your API key from [DeepSeek](https://platform.deepseek.com/)
 
@@ -77,9 +81,3 @@ The application keeps logs in:
 
 - `logs/combined.log` - All activity logs
 - `logs/error.log` - Only error messages
-
-## What It Looks For
-
-See [CRITERIA.md](./CRITERIA.md) for the complete list of apartment requirements.
-
-**To modify search criteria:** Edit the `CRITERIA.md` file and restart the application. The AI will automatically use your updated criteria for evaluating apartments.
