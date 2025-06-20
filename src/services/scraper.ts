@@ -1,8 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import puppeteer, { Browser } from "puppeteer";
-import fs from "fs-extra";
-import path from "path";
 import { config, Agency } from "../config/config.js";
 import logger from "../utils/logger.js";
 
