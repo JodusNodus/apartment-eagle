@@ -160,11 +160,5 @@ export async function evaluateAllProperties(
       });
     }
   }
-
-  const matchingProperties = evaluations.filter((e) => e.matches);
-  logger.info(
-    `Found ${matchingProperties.length} matching properties out of ${properties.length} total`
-  );
-
   return evaluations;
 }
