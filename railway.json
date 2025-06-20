@@ -5,7 +5,7 @@
   },
   "deploy": {
     "preDeployCommand": [
-      "npx prisma generate && npx prisma db push --accept-data-loss"
+      "npx prisma generate && npx prisma db push --accept-data-loss && node node_modules/puppeteer/install.mjs"
     ],
     "startCommand": "npm run dev",
     "restartPolicyType": "ON_FAILURE",

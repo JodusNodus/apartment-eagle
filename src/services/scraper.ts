@@ -28,6 +28,7 @@ export async function getSharedBrowser(): Promise<Browser> {
         "--no-zygote",
         "--disable-gpu",
       ],
+      ignoreDefaultArgs: ["--disable-extensions"],
     });
   }
   return sharedBrowser;
