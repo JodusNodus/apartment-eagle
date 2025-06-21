@@ -17,8 +17,6 @@ async function scrapeDetailPageWithHttp(
   agencyName: string
 ): Promise<PropertyDetail> {
   try {
-    logger.info(`[${agencyName}] Scraping detail page with HTTP: ${url}`);
-
     const { data } = await axios.get(url, {
       headers: {
         "User-Agent":
@@ -53,8 +51,6 @@ async function scrapeDetailPageWithPuppeteer(
   agencyName: string
 ): Promise<PropertyDetail> {
   try {
-    logger.info(`[${agencyName}] Scraping detail page with Puppeteer: ${url}`);
-
     const browser = await getSharedBrowser();
     const page = await browser.newPage();
 
@@ -69,7 +65,7 @@ async function scrapeDetailPageWithPuppeteer(
     // Navigate to the page
     await page.goto(url, {
       waitUntil: "networkidle2",
-      timeout: 30000,
+      timeout: 50000,
     });
 
     // Get the rendered HTML

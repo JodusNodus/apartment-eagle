@@ -60,7 +60,7 @@ async function scrapeWithPuppeteer(agency: Agency): Promise<Listing> {
     // Navigate to the page
     await page.goto(agency.url, {
       waitUntil: "networkidle2",
-      timeout: 30000,
+      timeout: 50000,
     });
 
     // Get the rendered HTML
