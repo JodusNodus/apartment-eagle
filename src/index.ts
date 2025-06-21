@@ -33,6 +33,12 @@ function setupGracefulShutdown(): void {
 }
 
 export async function main(): Promise<void> {
+  // Set a timeout to prevent hanging (30 minutes max)
+  const timeout = setTimeout(() => {
+    logger.error("Service timeout reached (30 minutes), forcing shutdown");
+    process.exit(1);
+  }, 30 * 60 * 1000);
+
   logger.info("Starting cycle");
   try {
     validateConfig();
@@ -213,6 +219,20 @@ export async function main(): Promise<void> {
     logger.info("Cycle completed");
   } catch (error: any) {
     logger.error(`Fatal error: ${error.message}`);
+  } finally {
+    // Clear the timeout since we're shutting down
+    clearTimeout(timeout);
+
+    // Always ensure proper shutdown for cron job execution
+    logger.info("Shutting down service after cycle completion");
+    try {
+      await closeSharedBrowser();
+      await closeDatabase();
+      logger.info("Service shutdown complete");
+    } catch (error: any) {
+      logger.error(`Error during shutdown: ${error.message}`);
+    }
+    process.exit(0);
   }
 }
 
